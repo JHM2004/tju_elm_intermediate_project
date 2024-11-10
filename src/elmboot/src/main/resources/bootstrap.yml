@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    nacos:
+      #把服务注册进nacos里面
+      discovery:
+        #注册地址
+        server-addr: localhost:8848
+        #用户名（由于nacos开启了权限认证，所以这里必须要有用户名和密码）
+#        username: nacos
+#        #密码
+#        password: nacos
+      #配置文件
+      config:
+        #组名
+        group: DEFAULT_GROUP
+        #注册地址
+        server-addr: localhost:8848
+        #文件后缀
+        file-extension: yaml
+        #用户名
+#        username: nacos
+#        #密码
+#        password: nacos

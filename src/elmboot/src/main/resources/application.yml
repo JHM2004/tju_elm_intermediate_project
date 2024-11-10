@@ -1,0 +1,121 @@
+server:
+  port: 8080    #端口（默认也是8080）
+  servlet:
+    context-path: /elm       #请求路径的前缀（让前端的请求路径在ip和端口后加一个工程名elm）
+
+logging:
+  level:
+    org:
+      springframework: debug   #输出的日志文件更详细，方便今后出问题了做调试
+    com:
+      neusoft:
+        elmboot:
+          mapper: debug     #将mapper接口执行的所有类型的日志都以dubug的形式输出出来
+
+#数据库连接需要的东西
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/elm?characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false&autoReconnect=true&rewriteBatchedStatements=true
+    username: root
+    password: 123456
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      config:
+        import-check:
+          enabled: false
+    compatibility-verifier:
+      enabled: false
+  application:
+    name: nacos-service
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+  task:
+    execution:
+      pool:
+        core-size: 8 # 核心线程池的大小
+        max-size: 16  # 最大线程数
+        queue-capacity: 128 # 队列容量
+        keep-alive: 10s   # 非核心线程空闲后的存活时间
+        thread-name-prefix: thread- # 线程名称前缀
+  data:
+    redis:
+      host: localhost
+      port: 6379
+#    password: your_password_here
+
+#  devtools:
+#    restart:
+#      enabled: true         # 开启自动重启
+#      poll-interval: 1000   # 设置轮询间隔
+#      quiet-period: 400     # 设置触发重启的静默期
+
+
+#配置mybatis的一些文件
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.neusoft.elmboot.po      #扫描整个po包，给实体类设置别名
+  configuration:
+    map-underscore-to-camel-case: true
+
+#配置mybatis-plus的一些文件
+mybatis-plus:
+  typeAliasesPackage: com.neusoft.elmboot.po
+  mapperLocations: classpath:mapper/*.xml
+# 配置sql注入关键字
+sql:
+  keywords: ;|'|"|\|--|_|\*|%|#|//|\+|=|or|and|like|select|insert|update|delete|alert|drop|truncate|declare|exec|execute|create|xp_|sp_|0x
+
+  
+#文心一言
+wenxincontroller:
+  #client_id
+  api: 
+   key: LzHLae3ch9isirMsCDnfO4gV
+  #client_secret
+  secret:
+   key: qEaqABpUPU4bQX2tuXK6efOeATaxA0jP
+  #access_token接口
+  token:
+   url: https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=LzHLae3ch9isirMsCDnfO4gV&client_secret=qEaqABpUPU4bQX2tuXK6efOeATaxA0jP
+  #文心服务器接口
+  chat: 
+   url: https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/ernie-tiny-8k?access_token=24.08aba675976071475000f485a9c42823.2592000.1728275676.282335-114752595
+
+
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    #自定义swagger前端请求路径,输入http:localhost:8080/swagger-ui会自动重定向到swagger页面
+    path: /swagger-ui
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs  #swagger后端请求地址
+    enabled: true   #是否开启文档功能
+  group-configs: #分组配置,可配置多个分组
+    - group: 'elm_plus'
+      paths-to-match: '/plus/**'
+      packages-to-scan: com.neusoft.elmboot
+    - group: 'elm_all'             #分组名称
+      paths-to-match: '/**'        #配置需要匹配的路径
+      packages-to-scan: com.neusoft.elmboot    #配置要扫描包的路径,一般配置到启动类所在的包名
+
+knife4j:
+  enable: true    #开启knife4j,无需添加@EnableKnife4j注解
+  setting:
+    language: zh_cn   #中文
+    swagger-model-name: 实体列表
+
+# pagehelper配置
+pagehelper:
+  helperDialect: mysql            #指定分页数据库类型（方言）
+  reasonable: true                #合理查询超过最大页，则查询最后一页
+  supportMethodsArguments: true
+  params: count=countSql

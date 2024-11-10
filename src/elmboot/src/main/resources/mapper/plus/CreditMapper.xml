@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.neusoft.elmboot.mapper.plus.CreditMapper">
+
+ <delete id="removeByIDsBatch">
+  DELETE FROM efficient_credit
+  WHERE id IN
+  <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+   #{item}
+  </foreach>
+ </delete>
+
+ <select id="listEfficientCreditById" resultType="com.neusoft.elmboot.po.domain_plus.vo.EfficientCreditVo">
+  SELECT *
+  FROM efficient_credit
+  WHERE user_id = #{userId}
+  ORDER BY create_time DESC
+ </select>
+
+
+ <insert id="insertExpiredCreditBatch">
+  INSERT INTO expired_credit (user_id, channel_id, type_id, credit, create_time, expired_time, efficient)
+  VALUES
+  <foreach collection="list" item="item" separator=",">
+   (#{item.userId}, #{item.channelId}, #{item.typeId}, #{item.credit}, #{item.createTime}, #{item.expiredTime}, #{item.efficient})
+  </foreach>
+ </insert>
+
+</mapper>
